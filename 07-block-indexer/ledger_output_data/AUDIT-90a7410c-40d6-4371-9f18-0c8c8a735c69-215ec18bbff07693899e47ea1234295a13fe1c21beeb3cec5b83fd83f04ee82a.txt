@@ -1,0 +1,26 @@
+eventKey: AUDIT-90a7410c-40d6-4371-9f18-0c8c8a735c69-215ec18bbff07693899e47ea1234295a13fe1c21beeb3cec5b83fd83f04ee82a
+applicationId: APP-1002
+auditId: 90a7410c-40d6-4371-9f18-0c8c8a735c69
+blockNumber: 0
+businessEvent: TX_TX001
+changedFields: [{"field": "risk_category", "newValue": "Low", "oldValue": null}, {"field": "recommended_amount", "newValue": "7500000", "oldValue": null}, {"field": "confidence_score", "newValue": "95", "oldValue": null}, {"field": "reasoning", "newValue": "Excellent credit profile with 820 score. IT business owner with 15+ years, strong EBITDA margins. Multiple existing loans managed well with zero defaults. DTI well within limits. High-value collateral available.", "oldValue": null}, {"field": "model_version", "newValue": "AI-CR-v3.3.0", "oldValue": null}]
+channelName: auditchannel
+correlationId: 31570f88-16f5-4471-b5fd-b8d340425a6b
+currentHash: 673f4e3a9ac0692c0645a3dc04f5203c61d9b07734530254792ef35185a327f1
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: d41fa448b58b0b8902aadbaa42e2372085713888e3752916a1c6735467734a0a
+exportedAt: 2026-07-28T18:41:16.809691+00:00
+metadata:
+  payload: {'confidence_score': '95', 'model_version': 'AI-CR-v3.3.0', 'reasoning': 'Excellent credit profile with 820 score. IT business owner with 15+ years, strong EBITDA margins. Multiple existing loans managed well with zero defaults. DTI well within limits. High-value collateral available.', 'recommended_amount': '7500000', 'risk_category': 'Low'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: 
+sequence: 1
+service: ai_recommendation
+submissionId: APP-1002-TX001
+timestamp: 2026-07-28T18:35:41.210479+00:00
+transactionId: 215ec18bbff07693899e47ea1234295a13fe1c21beeb3cec5b83fd83f04ee82a
+userId: SYSTEM
+workflowStep: ai_recommendation

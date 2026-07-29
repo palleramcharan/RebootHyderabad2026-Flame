@@ -1,0 +1,17 @@
+{
+  "queue_id": "55bd5f4a-dfac-477b-aafe-b20c67307b6e",
+  "application_id": "APP-1002",
+  "tx_type": "TX001",
+  "tx_num": 1,
+  "sequence": 13,
+  "service": "ai_recommendation",
+  "status": "queued",
+  "enqueued_at": "2026-07-28T19:34:25.100843+00:00",
+  "payload": {
+    "risk_category": "Low",
+    "recommended_amount": "7500000",
+    "confidence_score": "95",
+    "reasoning": "Excellent credit profile with 820 score. IT business owner with 15+ years, strong EBITDA margins. Multiple existing loans managed well with zero defaults. DTI well within limits. High-value collateral available.",
+    "model_version": "AI-CR-v3.3.0"
+  }
+}

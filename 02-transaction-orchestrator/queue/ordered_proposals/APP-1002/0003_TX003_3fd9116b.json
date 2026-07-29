@@ -1,0 +1,21 @@
+{
+  "queue_id": "3fd9116b-bf21-4f05-9d16-00f8e9819bda",
+  "application_id": "APP-1002",
+  "tx_type": "TX003",
+  "tx_num": 3,
+  "sequence": 3,
+  "service": "bdss",
+  "status": "completed",
+  "enqueued_at": "2026-07-28T18:47:00.901215+00:00",
+  "payload": {
+    "applicant_name": "Arun Nair",
+    "email": "arun.nair@email.com",
+    "phone": "9765432109",
+    "annual_income": "3600000",
+    "requested_amount": "8000000",
+    "employment_type": "Business owner",
+    "purpose": "Commercial property purchase for IT services office"
+  },
+  "dequeued_at": "2026-07-28T18:48:06.963472+00:00",
+  "completed_at": "2026-07-28T18:48:40.700038+00:00"
+}

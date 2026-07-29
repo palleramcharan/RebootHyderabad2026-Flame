@@ -1,0 +1,72 @@
+version: '3.8'
+
+networks:
+  fabric-net:
+    external: true
+    name: ${COMPOSE_PROJECT_NAME:-fabric}_fabric-net
+
+services:
+  evidence-vault:
+    build:
+      context: ../03-evidence-vault
+      dockerfile: Dockerfile
+    container_name: evidence-vault
+    environment:
+      - EVIDENCE_STORAGE=/data/evidence
+    ports:
+      - "8001:8001"
+    volumes:
+      - evidence-vault-data:/data/evidence
+    networks:
+      - fabric-net
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8001/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  dashboard-api:
+    build:
+      context: ../08-Dashboard
+      dockerfile: Dockerfile
+    container_name: dashboard-api
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_DB=audit_ledger
+    ports:
+      - "8002:8002"
+    depends_on:
+      mongodb:
+        condition: service_started
+    networks:
+      - fabric-net
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8002/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  blockchain-export-service:
+    build:
+      context: ../07-block-indexer
+      dockerfile: Dockerfile
+    container_name: blockchain-export-service
+    environment:
+      - FABRIC_ADAPTER_URL=http://fabric-adapter:8080
+      - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_DB=audit_ledger
+      - POLL_BUSY_SEC=15
+      - POLL_IDLE_SEC=60
+    depends_on:
+      fabric-adapter:
+        condition: service_started
+      mongodb:
+        condition: service_started
+    networks:
+      - fabric-net
+    restart: unless-stopped
+
+volumes:
+  evidence-vault-data:

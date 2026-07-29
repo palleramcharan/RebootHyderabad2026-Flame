@@ -1,0 +1,26 @@
+eventKey: AUDIT-33544243-4e63-454f-a168-0c7ae75f5241-57deacc8cf65bfa1ace75fdd700bfe7b36545290a7acef394bbe1c94e7e4831e
+applicationId: APP-1004
+auditId: 33544243-4e63-454f-a168-0c7ae75f5241
+blockNumber: 0
+businessEvent: TX_TX003
+changedFields: [{"field": "applicant_name", "newValue": "Sneha Patel", "oldValue": null}, {"field": "email", "newValue": "sneha.patel@email.com", "oldValue": null}, {"field": "phone", "newValue": "9988776655", "oldValue": null}, {"field": "annual_income", "newValue": "960000", "oldValue": null}, {"field": "requested_amount", "newValue": "1500000", "oldValue": null}, {"field": "employment_type", "newValue": "Self-employed", "oldValue": null}, {"field": "purpose", "newValue": "Working capital for textile business expansion", "oldValue": null}]
+channelName: auditchannel
+correlationId: cdbb75f1-f9f2-4089-891d-1ff725090419
+currentHash: 1a47f35a6d745e9de4e04f8a10329ba1de1743f4ba32d8f7a49b7b3f8671ee1f
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: d8eed2ff7f164c99ae9f5f6c8f12bdfef62a606804c65d87cb7106b5d46e2e65
+exportedAt: 2026-07-28T19:28:52.168658+00:00
+metadata:
+  payload: {'annual_income': '960000', 'applicant_name': 'Sneha Patel', 'email': 'sneha.patel@email.com', 'employment_type': 'Self-employed', 'phone': '9988776655', 'purpose': 'Working capital for textile business expansion', 'requested_amount': '1500000'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: f6d5540718145cd38891950a68dcf53ed10c977ddefd6ad98fdfb18921cb9288
+sequence: 3
+service: bdss
+submissionId: APP-1004-TX003
+timestamp: 2026-07-28T18:48:45.439300+00:00
+transactionId: 57deacc8cf65bfa1ace75fdd700bfe7b36545290a7acef394bbe1c94e7e4831e
+userId: SYSTEM
+workflowStep: bdss

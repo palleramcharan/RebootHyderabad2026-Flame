@@ -1,0 +1,26 @@
+eventKey: AUDIT-2c2d0c25-3bf9-489f-ae0d-656274f7e8a6-6d9476d624b0058c1a315f51c08af4f1662955af9b8548d4c9b2f9e695de54db
+applicationId: APP-1002
+auditId: 2c2d0c25-3bf9-489f-ae0d-656274f7e8a6
+blockNumber: 0
+businessEvent: TX_TX005
+changedFields: [{"field": "approved_amount", "newValue": "8000000", "oldValue": null}, {"field": "approval_conditions", "newValue": "Mortgage of proposed property, assignment of rental income, no-objection certificate from existing bankers. Disbursement directly to seller's account.", "oldValue": null}, {"field": "officer_name", "newValue": "Ananya Reddy", "oldValue": null}, {"field": "officer_id", "newValue": "AR-2024-0562", "oldValue": null}, {"field": "interest_rate", "newValue": "8", "oldValue": null}]
+channelName: auditchannel
+correlationId: 8ada3dab-85f2-481c-8d13-e9a2cd8b87a7
+currentHash: 7dd798a3fdc302942b12fe7e997d94687b2bb062c9617a0865d0d8f4e68eebe8
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: d1853ce9d6694f6ddd9ff371825910821471b5418f71bf0566db8f6a7b832233
+exportedAt: 2026-07-28T19:28:52.167925+00:00
+metadata:
+  payload: {'approval_conditions': "Mortgage of proposed property, assignment of rental income, no-objection certificate from existing bankers. Disbursement directly to seller's account.", 'approved_amount': '8000000', 'interest_rate': '8', 'officer_id': 'AR-2024-0562', 'officer_name': 'Ananya Reddy'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: a50014f41dd38f58f779acf2064b9e4bb1ba284753df837ebc1ac8ccc5c7015c
+sequence: 5
+service: credit_approval
+submissionId: APP-1002-TX005
+timestamp: 2026-07-28T18:49:18.877563+00:00
+transactionId: 6d9476d624b0058c1a315f51c08af4f1662955af9b8548d4c9b2f9e695de54db
+userId: SYSTEM
+workflowStep: credit_approval

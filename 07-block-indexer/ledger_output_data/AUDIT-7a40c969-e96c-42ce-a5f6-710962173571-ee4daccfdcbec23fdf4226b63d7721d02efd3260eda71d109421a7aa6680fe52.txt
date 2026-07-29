@@ -1,0 +1,26 @@
+eventKey: AUDIT-7a40c969-e96c-42ce-a5f6-710962173571-ee4daccfdcbec23fdf4226b63d7721d02efd3260eda71d109421a7aa6680fe52
+applicationId: APP-1004
+auditId: 7a40c969-e96c-42ce-a5f6-710962173571
+blockNumber: 0
+businessEvent: TX_TX002
+changedFields: [{"field": "override_reason", "newValue": "Customer relationship", "oldValue": null}, {"field": "modified_amount", "newValue": "1500000", "oldValue": null}, {"field": "reviewer_name", "newValue": "Vikram Singh", "oldValue": null}, {"field": "reviewer_notes", "newValue": "Existing term deposit of 8L held with bank. Business GST returns show consistent upward trend. Approved under mid-corporate relationship program with additional collateral.", "oldValue": null}, {"field": "exception_approved", "newValue": "Yes", "oldValue": null}]
+channelName: auditchannel
+correlationId: 870554b8-15dc-4d5b-a017-8f263855caeb
+currentHash: f6d5540718145cd38891950a68dcf53ed10c977ddefd6ad98fdfb18921cb9288
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: 81a9eb76358ef11baea7926db5af5945720527d86ff787dd38ebeb9340241ed5
+exportedAt: 2026-07-28T19:28:52.170098+00:00
+metadata:
+  payload: {'exception_approved': 'Yes', 'modified_amount': '1500000', 'override_reason': 'Customer relationship', 'reviewer_name': 'Vikram Singh', 'reviewer_notes': 'Existing term deposit of 8L held with bank. Business GST returns show consistent upward trend. Approved under mid-corporate relationship program with additional collateral.'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: b9974334ea88a1a6623eeff8eb8e75b1e717616f0750ba7557250b61ff1df0f0
+sequence: 2
+service: human_override
+submissionId: APP-1004-TX002
+timestamp: 2026-07-28T18:48:58.387706+00:00
+transactionId: ee4daccfdcbec23fdf4226b63d7721d02efd3260eda71d109421a7aa6680fe52
+userId: SYSTEM
+workflowStep: human_override

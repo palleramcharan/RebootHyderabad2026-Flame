@@ -1,0 +1,26 @@
+eventKey: AUDIT-871ffd8c-f44d-4c51-8ac2-02debf4f1ad3-4093d3d9205e46adc517c072251c56a93cc287c5655a5cab98f0bdf9772fb077
+applicationId: APP-1002
+auditId: 871ffd8c-f44d-4c51-8ac2-02debf4f1ad3
+blockNumber: 0
+businessEvent: TX_TX004
+changedFields: [{"field": "credit_score", "newValue": "820", "oldValue": null}, {"field": "existing_loans", "newValue": "3", "oldValue": null}, {"field": "default_history", "newValue": "None", "oldValue": null}, {"field": "dti_ratio", "newValue": "28", "oldValue": null}, {"field": "risk_category", "newValue": "Low", "oldValue": null}]
+channelName: auditchannel
+correlationId: 9b1bee9d-bd02-4562-8cb1-2f5d880103e1
+currentHash: b6a14c0c4c8b0081e33edd3222899c11df9c725618845bc02584f67f1b8178d7
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: 05d1e22a4d9c89380001369c0d110f656c72d1f856ac514ae8af3010284e818f
+exportedAt: 2026-07-28T18:41:16.808675+00:00
+metadata:
+  payload: {'credit_score': '820', 'default_history': 'None', 'dti_ratio': '28', 'existing_loans': '3', 'risk_category': 'Low'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: 999af753d50e20057ee8cd002800f384f176ef0b14d67a96fae7e5049d0e1000
+sequence: 4
+service: crss
+submissionId: APP-1002-TX004
+timestamp: 2026-07-28T18:37:05.805133+00:00
+transactionId: 4093d3d9205e46adc517c072251c56a93cc287c5655a5cab98f0bdf9772fb077
+userId: SYSTEM
+workflowStep: crss

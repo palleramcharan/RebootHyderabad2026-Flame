@@ -1,0 +1,17 @@
+{
+  "queue_id": "2834956a-9b53-4b1d-bc6c-fb1a9b1f3601",
+  "application_id": "APP-1004",
+  "tx_type": "TX001",
+  "tx_num": 1,
+  "sequence": 13,
+  "service": "ai_recommendation",
+  "status": "queued",
+  "enqueued_at": "2026-07-28T19:34:25.102083+00:00",
+  "payload": {
+    "risk_category": "Medium",
+    "recommended_amount": "1200000",
+    "confidence_score": "78",
+    "reasoning": "Self-employed with 5 years in business, moderate credit score, one prior 30-day default. DTI ratio at 45% is elevated. Business cash flows appear stable but require verification. Recommend conservative approach.",
+    "model_version": "AI-CR-v3.2.1"
+  }
+}

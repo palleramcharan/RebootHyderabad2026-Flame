@@ -1,0 +1,26 @@
+eventKey: AUDIT-a4819db1-695b-4397-8669-3fc145832cc4-fbde1c3b788c38debe253101ef069c3495ac6236c149f08db8290d5306863a07
+applicationId: APP-1002
+auditId: a4819db1-695b-4397-8669-3fc145832cc4
+blockNumber: 0
+businessEvent: TX_TX006
+changedFields: [{"field": "account_number", "newValue": "AXIS00123456789", "oldValue": null}, {"field": "disbursement_amount", "newValue": "8000000", "oldValue": null}, {"field": "loan_tenure", "newValue": "180", "oldValue": null}, {"field": "interest_rate", "newValue": "9", "oldValue": null}, {"field": "booking_date", "newValue": "2026-09-01", "oldValue": null}, {"field": "status", "newValue": "Booked", "oldValue": null}]
+channelName: auditchannel
+correlationId: cbbb33ca-9f9b-4f0e-a5e3-c37d3018ff53
+currentHash: 76575a6c53ee066cfadd3c41806cb2d58abc72564048965f05c3a1bcb4b90f1c
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: ffae34c80f501a03f65050497969d8f14c50b020b009731b20337fc3cc2bc78d
+exportedAt: 2026-07-28T19:28:52.172344+00:00
+metadata:
+  payload: {'account_number': 'AXIS00123456789', 'booking_date': '2026-09-01', 'disbursement_amount': '8000000', 'interest_rate': '9', 'loan_tenure': '180', 'status': 'Booked'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: 7dd798a3fdc302942b12fe7e997d94687b2bb062c9617a0865d0d8f4e68eebe8
+sequence: 6
+service: iris
+submissionId: APP-1002-TX006
+timestamp: 2026-07-28T18:51:20.184632+00:00
+transactionId: fbde1c3b788c38debe253101ef069c3495ac6236c149f08db8290d5306863a07
+userId: SYSTEM
+workflowStep: iris

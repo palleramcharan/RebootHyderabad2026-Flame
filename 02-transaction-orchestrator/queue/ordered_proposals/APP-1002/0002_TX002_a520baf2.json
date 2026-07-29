@@ -1,0 +1,19 @@
+{
+  "queue_id": "a520baf2-bddd-413a-be07-de4f47dd3991",
+  "application_id": "APP-1002",
+  "tx_type": "TX002",
+  "tx_num": 2,
+  "sequence": 2,
+  "service": "human_override",
+  "status": "completed",
+  "enqueued_at": "2026-07-28T18:47:00.899331+00:00",
+  "payload": {
+    "override_reason": "Collateral available",
+    "modified_amount": "8000000",
+    "reviewer_name": "Suresh Iyer",
+    "reviewer_notes": "Property being financed is pre-leased to a Fortune 500 tenant. Additional collateral of commercial space in prime location valued at 1.2Cr offered. LTV well within 75% threshold.",
+    "exception_approved": "Yes"
+  },
+  "dequeued_at": "2026-07-28T18:48:03.184395+00:00",
+  "completed_at": "2026-07-28T18:48:38.570089+00:00"
+}

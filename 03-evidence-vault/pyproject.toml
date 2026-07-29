@@ -1,0 +1,11 @@
+[project]
+name = "evidence-vault"
+version = "1.0.0"
+description = "Evidence Vault — SHA-256 hashing, storage, and integrity verification"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

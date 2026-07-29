@@ -1,0 +1,19 @@
+{
+  "queue_id": "6ff7bd95-c182-4d7a-b8bf-36a0a62405ed",
+  "application_id": "APP-1004",
+  "tx_type": "TX002",
+  "tx_num": 2,
+  "sequence": 2,
+  "service": "human_override",
+  "status": "completed",
+  "enqueued_at": "2026-07-28T18:47:00.897074+00:00",
+  "payload": {
+    "override_reason": "Customer relationship",
+    "modified_amount": "1500000",
+    "reviewer_name": "Vikram Singh",
+    "reviewer_notes": "Existing term deposit of 8L held with bank. Business GST returns show consistent upward trend. Approved under mid-corporate relationship program with additional collateral.",
+    "exception_approved": "Yes"
+  },
+  "dequeued_at": "2026-07-28T18:48:10.610500+00:00",
+  "completed_at": "2026-07-28T18:49:09.500909+00:00"
+}

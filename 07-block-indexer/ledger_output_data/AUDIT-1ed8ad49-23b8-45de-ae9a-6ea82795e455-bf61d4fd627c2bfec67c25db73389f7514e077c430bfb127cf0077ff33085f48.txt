@@ -1,0 +1,26 @@
+eventKey: AUDIT-1ed8ad49-23b8-45de-ae9a-6ea82795e455-bf61d4fd627c2bfec67c25db73389f7514e077c430bfb127cf0077ff33085f48
+applicationId: APP-1002
+auditId: 1ed8ad49-23b8-45de-ae9a-6ea82795e455
+blockNumber: 0
+businessEvent: TX_TX002
+changedFields: [{"field": "override_reason", "newValue": "Collateral available", "oldValue": null}, {"field": "modified_amount", "newValue": "8000000", "oldValue": null}, {"field": "reviewer_name", "newValue": "Suresh Iyer", "oldValue": null}, {"field": "reviewer_notes", "newValue": "Property being financed is pre-leased to a Fortune 500 tenant. Additional collateral of commercial space in prime location valued at 1.2Cr offered. LTV well within 75% threshold.", "oldValue": null}, {"field": "exception_approved", "newValue": "Yes", "oldValue": null}]
+channelName: auditchannel
+correlationId: ec3b1693-1c0b-44bf-9db2-8ddc9d5d7b09
+currentHash: 601e9f20eb3ceca66e8cc0f2dac0713abc32ed099d32a00cf1e2265f79f5f5f3
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: ce0889ea9b22f3aef1b76a2956efde75ae57ad10594bf62907ad25f904b04090
+exportedAt: 2026-07-28T18:41:16.793260+00:00
+metadata:
+  payload: {'exception_approved': 'Yes', 'modified_amount': '8000000', 'override_reason': 'Collateral available', 'reviewer_name': 'Suresh Iyer', 'reviewer_notes': 'Property being financed is pre-leased to a Fortune 500 tenant. Additional collateral of commercial space in prime location valued at 1.2Cr offered. LTV well within 75% threshold.'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: 673f4e3a9ac0692c0645a3dc04f5203c61d9b07734530254792ef35185a327f1
+sequence: 2
+service: human_override
+submissionId: APP-1002-TX002
+timestamp: 2026-07-28T18:35:59.370932+00:00
+transactionId: bf61d4fd627c2bfec67c25db73389f7514e077c430bfb127cf0077ff33085f48
+userId: SYSTEM
+workflowStep: human_override

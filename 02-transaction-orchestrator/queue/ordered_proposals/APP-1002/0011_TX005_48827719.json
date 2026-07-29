@@ -1,0 +1,17 @@
+{
+  "queue_id": "48827719-bce9-4656-880e-abb7ec097969",
+  "application_id": "APP-1002",
+  "tx_type": "TX005",
+  "tx_num": 5,
+  "sequence": 11,
+  "service": "credit_approval",
+  "status": "queued",
+  "enqueued_at": "2026-07-28T19:31:51.710275+00:00",
+  "payload": {
+    "approved_amount": "8000000",
+    "approval_conditions": "Mortgage of proposed property, assignment of rental income, no-objection certificate from existing bankers. Disbursement directly to seller's account.",
+    "officer_name": "Ananya Reddy",
+    "officer_id": "AR-2024-0562",
+    "interest_rate": "8"
+  }
+}

@@ -1,0 +1,26 @@
+eventKey: AUDIT-50972339-e908-4b02-b7e2-9efe741df7cf-1c2455108538e1b657a0668e47791c9e0fb33ed000b387215fab58682aeac0a4
+applicationId: APP-1004
+auditId: 50972339-e908-4b02-b7e2-9efe741df7cf
+blockNumber: 0
+businessEvent: TX_TX006
+changedFields: [{"field": "account_number", "newValue": "ICICI00098765432", "oldValue": null}, {"field": "disbursement_amount", "newValue": "1500000", "oldValue": null}, {"field": "loan_tenure", "newValue": "60", "oldValue": null}, {"field": "interest_rate", "newValue": "10", "oldValue": null}, {"field": "booking_date", "newValue": "2026-07-28", "oldValue": null}, {"field": "status", "newValue": "Booked", "oldValue": null}]
+channelName: auditchannel
+correlationId: 7255ae53-9657-4306-9bab-485cf694903d
+currentHash: 157c859597d4d31faeaf6a22fac13c6e3e04720e53fe4a098b878a0d361c9a8a
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: 27ccc9cd4f80a78aaa7682f5a884bf8d67a83300e73ff1bd4190a3045a515621
+exportedAt: 2026-07-28T18:41:16.801103+00:00
+metadata:
+  payload: {'account_number': 'ICICI00098765432', 'booking_date': '2026-07-28', 'disbursement_amount': '1500000', 'interest_rate': '10', 'loan_tenure': '60', 'status': 'Booked'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: dcb9a28425be90f229663e219fae4d4a8d31ab72d2b955b002f9e6ac69c1c8f1
+sequence: 6
+service: iris
+submissionId: APP-1004-TX006
+timestamp: 2026-07-28T18:19:48.597037+00:00
+transactionId: 1c2455108538e1b657a0668e47791c9e0fb33ed000b387215fab58682aeac0a4
+userId: SYSTEM
+workflowStep: iris

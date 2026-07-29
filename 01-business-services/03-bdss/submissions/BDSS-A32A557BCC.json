@@ -1,0 +1,15 @@
+{
+  "submission_id": "BDSS-A32A557BCC",
+  "application_id": "APP-1004",
+  "service": "bdss",
+  "submitted_at": "2026-07-28T16:45:47.104582+00:00",
+  "data": {
+    "applicant_name": "Sneha Patel",
+    "email": "sneha.patel@email.com",
+    "phone": "9988776655",
+    "annual_income": "960000",
+    "requested_amount": "1500000",
+    "employment_type": "Self-employed",
+    "purpose": "Working capital for textile business expansion"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "queue_id": "f4b288b3-e3c5-4c40-a711-4f6098a0c17b",
+  "application_id": "APP-1004",
+  "tx_type": "TX006",
+  "tx_num": 6,
+  "sequence": 12,
+  "service": "iris",
+  "status": "queued",
+  "enqueued_at": "2026-07-28T19:31:51.712771+00:00",
+  "payload": {
+    "account_number": "ICICI00098765432",
+    "disbursement_amount": "1500000",
+    "loan_tenure": "60",
+    "interest_rate": "10",
+    "booking_date": "2026-07-28",
+    "status": "Booked"
+  }
+}

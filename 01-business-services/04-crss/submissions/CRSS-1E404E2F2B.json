@@ -1,0 +1,13 @@
+{
+  "submission_id": "CRSS-1E404E2F2B",
+  "application_id": "APP-1002",
+  "service": "crss",
+  "submitted_at": "2026-07-28T16:44:55.226553+00:00",
+  "data": {
+    "credit_score": "820",
+    "existing_loans": "3",
+    "default_history": "None",
+    "dti_ratio": "28",
+    "risk_category": "Low"
+  }
+}

@@ -1,0 +1,26 @@
+eventKey: AUDIT-4989ec70-7545-4e6d-a0fa-1b54b4cfbb4c-f69084994bdfd97f0ddbc37cf939fc342a1318f340a3e67226b2fc268a89cd07
+applicationId: APP-1004
+auditId: 4989ec70-7545-4e6d-a0fa-1b54b4cfbb4c
+blockNumber: 0
+businessEvent: TX_TX005
+changedFields: [{"field": "approved_amount", "newValue": "1500000", "oldValue": null}, {"field": "approval_conditions", "newValue": "Hypothecation of inventory and book debts, personal guarantee of spouse, quarterly stock statements. Rate linked to external benchmark.", "oldValue": null}, {"field": "officer_name", "newValue": "Neha Gupta", "oldValue": null}, {"field": "officer_id", "newValue": "NG-2024-0387", "oldValue": null}, {"field": "interest_rate", "newValue": "10", "oldValue": null}]
+channelName: auditchannel
+correlationId: bca4b59c-bcfd-4378-8a81-4895727ca462
+currentHash: 6be66dd5e4ec96f7687b39e816f149fe2f8514947825e75d9850c21b54b76c78
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: fa44bc721594e1dd6208c4278180efeee8a5c9f5a1273811c65a462a88892e40
+exportedAt: 2026-07-28T18:41:16.799967+00:00
+metadata:
+  payload: {'approval_conditions': 'Hypothecation of inventory and book debts, personal guarantee of spouse, quarterly stock statements. Rate linked to external benchmark.', 'approved_amount': '1500000', 'interest_rate': '10', 'officer_id': 'NG-2024-0387', 'officer_name': 'Neha Gupta'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: 174172ac153d938908d5627e25ada93e3aec64cb25ba49434a0808bd0de797ff
+sequence: 5
+service: credit_approval
+submissionId: APP-1004-TX005
+timestamp: 2026-07-28T18:39:57.251317+00:00
+transactionId: f69084994bdfd97f0ddbc37cf939fc342a1318f340a3e67226b2fc268a89cd07
+userId: SYSTEM
+workflowStep: credit_approval

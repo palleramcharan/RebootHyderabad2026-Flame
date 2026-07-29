@@ -1,0 +1,13 @@
+{
+  "submission_id": "HUMAN_OVERRIDE-46F23EAA4B",
+  "application_id": "APP-1002",
+  "service": "human_override",
+  "submitted_at": "2026-07-28T16:44:48.346617+00:00",
+  "data": {
+    "override_reason": "Collateral available",
+    "modified_amount": "8000000",
+    "reviewer_name": "Suresh Iyer",
+    "reviewer_notes": "Property being financed is pre-leased to a Fortune 500 tenant. Additional collateral of commercial space in prime location valued at 1.2Cr offered. LTV well within 75% threshold.",
+    "exception_approved": "Yes"
+  }
+}

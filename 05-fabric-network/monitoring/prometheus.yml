@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "fabric-adapter"
+    static_configs:
+      - targets: ["fabric-adapter:8080"]
+    metrics_path: /health
+
+  - job_name: "fabric-orderer"
+    static_configs:
+      - targets: ["orderer0.example.com:7050"]
+
+  - job_name: "fabric-peer"
+    static_configs:
+      - targets: ["peer0.org1.example.com:7051"]
+
+  - job_name: "couchdb"
+    static_configs:
+      - targets: ["couchdb0:5984"]

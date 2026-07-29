@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: evidence-vault
+Version: 1.0.0
+Summary: Evidence Vault — SHA-256 hashing, storage, and integrity verification
+Requires-Python: >=3.10
+Requires-Dist: httpx

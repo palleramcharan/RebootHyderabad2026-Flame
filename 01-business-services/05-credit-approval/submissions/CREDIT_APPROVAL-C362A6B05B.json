@@ -1,0 +1,13 @@
+{
+  "submission_id": "CREDIT_APPROVAL-C362A6B05B",
+  "application_id": "APP-1002",
+  "service": "credit_approval",
+  "submitted_at": "2026-07-28T16:45:11.232555+00:00",
+  "data": {
+    "approved_amount": "8000000",
+    "approval_conditions": "Mortgage of proposed property, assignment of rental income, no-objection certificate from existing bankers. Disbursement directly to seller's account.",
+    "officer_name": "Ananya Reddy",
+    "officer_id": "AR-2024-0562",
+    "interest_rate": "8"
+  }
+}

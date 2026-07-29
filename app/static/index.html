@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit Decisioning System</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Credit Decisioning &amp; Lifecycle Management</h1>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="app-selector">
+        <label for="appSelect">Application ID</label>
+        <select id="appSelect">
+          <option value="">-- Select Application --</option>
+        </select>
+        <button id="newAppBtn" class="btn-sm" title="Generate new application ID">+ New ID</button>
+      </div>
+
+      <div class="user-selector">
+        <label for="userSelect">Applicant Profile</label>
+        <select id="userSelect">
+          <option value="">-- Select User for Auto-Fill --</option>
+        </select>
+        <p class="user-hint">Selecting a user auto-fills all service forms</p>
+      </div>
+
+      <nav class="service-nav" id="serviceNav">
+        <label>Service Stage</label>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="deleteAllBtn" class="btn-danger btn-sm sidebar-btn">Remove from all services</button>
+      </div>
+    </aside>
+
+    <main class="main-panel" id="mainPanel">
+      <p class="loading">Loading services...</p>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // --- State ---
+    let applications = [];
+    let services = {};
+    let forms = {};
+    let users = [];
+    let serviceKeys = [];
+    let currentAppId = '';
+    let currentUserId = '';
+
+    // --- DOM refs ---
+    const appSelect = document.getElementById('appSelect');
+    const newAppBtn = document.getElementById('newAppBtn');
+    const userSelect = document.getElementById('userSelect');
+    const deleteAllBtn = document.getElementById('deleteAllBtn');
+    const serviceNav = document.getElementById('serviceNav');
+    const mainPanel = document.getElementById('mainPanel');
+    const toast = document.getElementById('toast');
+
+    // --- Init ---
+    async function init() {
+      try {
+        [applications, services, forms, users] = await Promise.all([
+          fetch('/api/applications').then(r => r.json()),
+          fetch('/api/services').then(r => r.json()),
+          fetch('/api/forms').then(r => r.json()),
+          fetch('/api/users').then(r => r.json()),
+        ]);
+        serviceKeys = Object.keys(services);
+        renderAppSelect();
+        renderUserSelect();
+        renderNav();
+        renderPanel(serviceKeys[0]);
+      } catch (err) {
+        mainPanel.innerHTML = `<p class="error-placeholder">Failed to load: ${err.message}</p>`;
+      }
+    }
+
+    // --- Application select ---
+    function renderAppSelect() {
+      appSelect.innerHTML = '<option value="">-- Select Application --</option>';
+      applications.forEach(app => {
+        const opt = document.createElement('option');
+        opt.value = app.id;
+        opt.textContent = `${app.id} — ${app.name}`;
+        appSelect.appendChild(opt);
+      });
+    }
+
+    function getNextAppId() {
+      let maxNum = 1000;
+      applications.forEach(a => {
+        const num = parseInt(a.id.replace('APP-', ''), 10);
+        if (num > maxNum) maxNum = num;
+      });
+      return `APP-${maxNum + 1}`;
+    }
+
+    appSelect.addEventListener('change', () => {
+      currentAppId = appSelect.value;
+      document.querySelectorAll('.app-id-input').forEach(inp => inp.value = currentAppId);
+      document.querySelectorAll('.current-app-id').forEach(el => el.textContent = currentAppId);
+    });
+
+    newAppBtn.addEventListener('click', () => {
+      const newId = getNextAppId();
+      applications.push({ id: newId, name: 'Custom Application', max_amount: 0 });
+      const opt = document.createElement('option');
+      opt.value = newId;
+      opt.textContent = `${newId} — Custom Application`;
+      opt.selected = true;
+      appSelect.appendChild(opt);
+      appSelect.value = newId;
+      appSelect.dispatchEvent(new Event('change'));
+      showToast(`Created new application ID: ${newId}`);
+    });
+
+    // --- User select with auto-fill ---
+    function renderUserSelect() {
+      userSelect.innerHTML = '<option value="">-- Select User for Auto-Fill --</option>';
+      users.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.id;
+        opt.textContent = `${u.id} — ${u.name}`;
+        userSelect.appendChild(opt);
+      });
+    }
+
+    userSelect.addEventListener('change', () => {
+      currentUserId = userSelect.value;
+      if (!currentUserId) return;
+      const user = users.find(u => u.id === currentUserId);
+      if (!user) return;
+      // Auto-fill all service forms
+      serviceKeys.forEach(key => {
+        const userData = user[key];
+        if (!userData) return;
+        const panel = document.getElementById(`panel-${key}`);
+        if (!panel) return;
+        Object.entries(userData).forEach(([fieldName, value]) => {
+          const input = panel.querySelector(`[name="${fieldName}"]`);
+          if (input) input.value = value;
+        });
+      });
+      showToast(`Auto-filled all forms with ${user.name}'s data`);
+    });
+
+    // --- Navigation tabs ---
+    function renderNav() {
+      serviceNav.innerHTML = '<label>Service Stage</label>';
+      serviceKeys.forEach((key, i) => {
+        const s = services[key];
+        const btn = document.createElement('button');
+        btn.className = `tab-btn${i === 0 ? ' active' : ''}`;
+        btn.dataset.service = key;
+        btn.innerHTML = `
+          <span class="tab-step">${s.step}</span>
+          <span class="tab-name">${s.label}</span>
+          <span class="tab-tx">${s.tx}</span>
+        `;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderPanel(key);
+        });
+        serviceNav.appendChild(btn);
+      });
+    }
+
+    // --- Panel rendering ---
+    function renderPanel(serviceKey) {
+      const s = services[serviceKey];
+      const fields = forms[serviceKey] || [];
+      mainPanel.innerHTML = `
+        <section class="service-panel active" id="panel-${serviceKey}">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <span class="tx-badge">${s.tx}</span>
+              <h2>${s.label}</h2>
+            </div>
+            <span class="step-badge">Step ${s.step} of 06</span>
+          </div>
+
+          <div class="tx-info-bar">
+            <div class="tx-info-item">
+              <span class="tx-info-label">Transaction</span>
+              <span class="tx-info-value">${s.tx}</span>
+            </div>
+            <div class="tx-info-item">
+              <span class="tx-info-label">Service</span>
+              <span class="tx-info-value">${s.name}</span>
+            </div>
+            <div class="tx-info-item">
+              <span class="tx-info-label">Chaincode Rule</span>
+              <span class="tx-info-value">${s.step}-${s.name.replace(/ /g,'')}.rules.js</span>
+            </div>
+            <div class="tx-info-item">
+              <span class="tx-info-label">Lifecycle Stage</span>
+              <span class="tx-info-value">${s.label}</span>
+            </div>
+          </div>
+
+          <form class="service-form" data-service="${serviceKey}">
+            <input type="hidden" name="application_id" class="app-id-input" value="${currentAppId}" />
+
+            <div class="form-grid">
+              ${fields.map(f => {
+                const isFull = f.type === 'textarea';
+                const req = f.required ? 'required' : '';
+                let input = '';
+                if (f.type === 'select') {
+                  input = `<select id="field-${serviceKey}-${f.name}" name="${f.name}" ${req}>
+                    <option value="">-- Select --</option>
+                    ${f.options.map(o => `<option value="${o}">${o}</option>`).join('')}
+                  </select>`;
+                } else if (f.type === 'textarea') {
+                  input = `<textarea id="field-${serviceKey}-${f.name}" name="${f.name}" rows="3" ${req}></textarea>`;
+                } else {
+                  input = `<input id="field-${serviceKey}-${f.name}" name="${f.name}" type="${f.type}" ${req} />`;
+                }
+                return `<div class="form-group${isFull ? ' full-width' : ''}">
+                  <label for="field-${serviceKey}-${f.name}">${f.label}</label>
+                  ${input}
+                </div>`;
+              }).join('')}
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Submit ${s.tx} — ${s.name}</button>
+              <button type="button" class="btn-outline view-submissions-btn">View / Manage Submission</button>
+            </div>
+          </form>
+
+          <div class="submissions-section" id="submissions-${serviceKey}" style="display:none;">
+            <div class="submissions-header">
+              <h3>Submission Details: <span class="current-app-id">${currentAppId}</span> in ${s.tx}</h3>
+              <button class="btn-sm btn-outline close-submissions">Close</button>
+            </div>
+            <div class="submissions-list">
+              <p class="placeholder">No submissions yet.</p>
+            </div>
+          </div>
+        </section>
+      `;
+
+      const form = mainPanel.querySelector('.service-form');
+      form.addEventListener('submit', handleSubmit);
+
+      const viewBtn = mainPanel.querySelector('.view-submissions-btn');
+      viewBtn.addEventListener('click', handleViewSubmissions);
+
+      const closeBtn = mainPanel.querySelector('.close-submissions');
+      if (closeBtn) closeBtn.addEventListener('click', () => {
+        document.getElementById(`submissions-${serviceKey}`).style.display = 'none';
+      });
+
+      // Re-populate user data if a user is selected
+      if (currentUserId) {
+        const user = users.find(u => u.id === currentUserId);
+        if (user && user[serviceKey]) {
+          Object.entries(user[serviceKey]).forEach(([fieldName, value]) => {
+            const input = document.querySelector(`#panel-${serviceKey} [name="${fieldName}"]`);
+            if (input) input.value = value;
+          });
+        }
+      }
+    }
+
+    // --- Toast ---
+    function showToast(msg, type = 'success') {
+      toast.textContent = msg;
+      toast.className = `toast ${type}`;
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 4000);
+    }
+
+    // --- Submit ---
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const service = form.dataset.service;
+      const formData = new FormData(form);
+      const payload = {};
+      formData.forEach((value, key) => { payload[key] = value; });
+
+      if (!payload.application_id) {
+        showToast('Please select or create an Application ID first', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/submissions/${service}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.detail || 'Submission failed');
+        showToast(`${services[service].tx} submitted: ${result.submission_id}`);
+        form.reset();
+        document.querySelectorAll('.app-id-input').forEach(inp => inp.value = currentAppId);
+        // Re-apply user auto-fill if user is selected
+        if (currentUserId) {
+          const user = users.find(u => u.id === currentUserId);
+          if (user && user[service]) {
+            Object.entries(user[service]).forEach(([fieldName, value]) => {
+              const input = document.querySelector(`#panel-${service} [name="${fieldName}"]`);
+              if (input) input.value = value;
+            });
+          }
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    // --- View / Delete submissions (enhanced) ---
+    async function handleViewSubmissions(e) {
+      const btn = e.currentTarget;
+      const panel = btn.closest('.service-panel');
+      const section = panel.querySelector('.submissions-section');
+      const list = section.querySelector('.submissions-list');
+      const form = panel.querySelector('.service-form');
+      const service = form.dataset.service;
+      const s = services[service];
+
+      if (!currentAppId) {
+        showToast('Select an application ID first', 'error');
+        return;
+      }
+
+      section.style.display = 'block';
+      list.innerHTML = '<p class="placeholder"><span class="spinner"></span> Loading submission data...</p>';
+
+      try {
+        // Fetch full status and all submissions for this service
+        const [statusRes, allSubsRes] = await Promise.all([
+          fetch(`/api/applications/${currentAppId}/status`),
+          fetch(`/api/submissions/${service}`)
+        ]);
+        const status = await statusRes.json();
+        const allSubs = await allSubsRes.json();
+
+        if (!status.services[service] || !status.services[service].exists) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <p class="empty-icon">📋</p>
+              <p>No submission found for <strong>${currentAppId}</strong> in <strong>${s.tx} — ${s.name}</strong>.</p>
+              <p class="empty-hint">Fill the form above and submit to create a record.</p>
+            </div>`;
+          return;
+        }
+
+        const sub = status.services[service].submission;
+
+        // Build timeline of all submissions for context
+        const sortedSubs = allSubs
+          .filter(x => x.application_id === currentAppId)
+          .sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+
+        list.innerHTML = '';
+
+        // --- Current submission detail card ---
+        const detailCard = document.createElement('div');
+        detailCard.className = 'detail-card';
+        detailCard.innerHTML = `
+          <div class="detail-header">
+            <div class="detail-title-row">
+              <h4>${s.tx} — ${s.name}</h4>
+              <span class="detail-id">${sub.submission_id}</span>
+            </div>
+            <div class="detail-meta-grid">
+              <div class="meta-item">
+                <span class="meta-label">Submitted</span>
+                <span class="meta-value">${new Date(sub.submitted_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' })}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Application</span>
+                <span class="meta-value">${currentAppId}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Service</span>
+                <span class="meta-value">${s.name}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Lifecycle Step</span>
+                <span class="meta-value">${s.step}/06</span>
+              </div>
+            </div>
+          </div>
+          <div class="detail-body">
+            <h5>Transaction Payload</h5>
+            <div class="payload-table-wrap">
+              <table class="payload-table">
+                <thead>
+                  <tr><th>Field</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                  ${Object.entries(sub.data || {}).map(([k, v]) => `
+                    <tr>
+                      <td class="field-name">${k}</td>
+                      <td class="field-value">${v !== null && v !== undefined ? v : '<span class="null-value">null</span>'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="detail-footer">
+            <span class="raw-toggle" data-service="${service}" data-app-id="${currentAppId}">View Raw JSON</span>
+            <button class="btn-danger btn-sm delete-sub" data-service="${service}" data-app-id="${currentAppId}">Delete This Submission</button>
+          </div>
+          <div class="raw-json-box" id="raw-${service}" style="display:none;">
+            <pre>${JSON.stringify(sub, null, 2)}</pre>
+          </div>
+        `;
+        list.appendChild(detailCard);
+
+        // Raw JSON toggle
+        detailCard.querySelector('.raw-toggle').addEventListener('click', (e) => {
+          const box = document.getElementById(`raw-${service}`);
+          const isHidden = box.style.display === 'none';
+          box.style.display = isHidden ? 'block' : 'none';
+          e.target.textContent = isHidden ? 'Hide Raw JSON' : 'View Raw JSON';
+        });
+
+        // Delete with confirmation
+        detailCard.querySelector('.delete-sub').addEventListener('click', async (delBtn) => {
+          const svc = delBtn.target.dataset.service;
+          const appId = delBtn.target.dataset.appId;
+          if (!confirm(`Delete ${svc.toUpperCase()} submission for ${appId}? This cannot be undone.`)) return;
+          try {
+            const delRes = await fetch(`/api/submissions/${svc}/${appId}`, { method: 'DELETE' });
+            const delResult = await delRes.json();
+            if (!delRes.ok) throw new Error(delResult.detail);
+            showToast(`Deleted ${svc.toUpperCase()} submission for ${appId}`);
+            btn.click();
+          } catch (err) {
+            showToast(err.message, 'error');
+          }
+        });
+
+        // --- All submissions timeline ---
+        if (sortedSubs.length > 1) {
+          const timelineSection = document.createElement('div');
+          timelineSection.className = 'timeline-section';
+          timelineSection.innerHTML = `<h5>Submission History (${sortedSubs.length} total)</h5>`;
+          const timeline = document.createElement('div');
+          timeline.className = 'timeline';
+          sortedSubs.forEach((s, idx) => {
+            const item = document.createElement('div');
+            item.className = `timeline-item${idx === 0 ? ' latest' : ''}`;
+            item.innerHTML = `
+              <div class="timeline-marker">${idx === 0 ? '●' : '○'}</div>
+              <div class="timeline-content">
+                <div class="timeline-head">
+                  <strong>${s.submission_id}</strong>
+                  <span>${new Date(s.submitted_at).toLocaleString('en-IN')}</span>
+                </div>
+                <div class="timeline-body">
+                  <pre>${JSON.stringify(s.data, null, 2)}</pre>
+                </div>
+              </div>
+            `;
+            timeline.appendChild(item);
+          });
+          timelineSection.appendChild(timeline);
+          list.appendChild(timelineSection);
+        }
+
+        // --- Service lifecycle progress ---
+        const progressSection = document.createElement('div');
+        progressSection.className = 'progress-section';
+        progressSection.innerHTML = `<h5>Lifecycle Progress</h5>`;
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+
+        const statusPromises = serviceKeys.map(async (k) => {
+          try {
+            const res = await fetch(`/api/applications/${currentAppId}/status`);
+            const data = await res.json();
+            return { key: k, exists: data.services[k]?.exists || false };
+          } catch { return { key: k, exists: false }; }
+        });
+        const results = await Promise.all(statusPromises);
+
+        const progressInner = document.createElement('div');
+        progressInner.className = 'progress-steps';
+        results.forEach(r => {
+          const step = document.createElement('div');
+          step.className = `progress-step${r.exists ? ' completed' : ''}`;
+          const info = services[r.key];
+          step.innerHTML = `
+            <span class="progress-dot">${r.exists ? '✓' : info.step}</span>
+            <span class="progress-label">${info.tx}</span>
+            <span class="progress-sub">${info.name}</span>
+          `;
+          progressInner.appendChild(step);
+        });
+        progressBar.appendChild(progressInner);
+        progressSection.appendChild(progressBar);
+        list.appendChild(progressSection);
+
+      } catch (err) {
+        list.innerHTML = `<p class="placeholder error-placeholder">Error loading data: ${err.message}</p>`;
+      }
+    }
+
+    // --- Delete from all services ---
+    deleteAllBtn.addEventListener('click', async () => {
+      if (!currentAppId) {
+        showToast('Select an application ID first', 'error');
+        return;
+      }
+      if (!confirm(`Delete ALL submissions for ${currentAppId} across all 6 services? This action cannot be undone.`)) return;
+
+      try {
+        const res = await fetch(`/api/applications/${currentAppId}`, { method: 'DELETE' });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.detail);
+        showToast(`Removed ${result.removed.length} submission(s) for ${currentAppId}`);
+        const activeTab = document.querySelector('.tab-btn.active');
+        if (activeTab) renderPanel(activeTab.dataset.service);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // --- Start ---
+    init();
+  </script>
+</body>
+</html>

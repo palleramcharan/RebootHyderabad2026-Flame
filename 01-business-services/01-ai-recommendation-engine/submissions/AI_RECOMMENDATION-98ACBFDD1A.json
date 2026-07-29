@@ -1,0 +1,13 @@
+{
+  "submission_id": "AI_RECOMMENDATION-98ACBFDD1A",
+  "application_id": "APP-1002",
+  "service": "ai_recommendation",
+  "submitted_at": "2026-07-28T16:44:14.799726+00:00",
+  "data": {
+    "risk_category": "Low",
+    "recommended_amount": "7500000",
+    "confidence_score": "95",
+    "reasoning": "Excellent credit profile with 820 score. IT business owner with 15+ years, strong EBITDA margins. Multiple existing loans managed well with zero defaults. DTI well within limits. High-value collateral available.",
+    "model_version": "AI-CR-v3.3.0"
+  }
+}

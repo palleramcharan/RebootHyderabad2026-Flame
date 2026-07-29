@@ -1,0 +1,13 @@
+{
+  "submission_id": "CREDIT_APPROVAL-384AB27326",
+  "application_id": "APP-1004",
+  "service": "credit_approval",
+  "submitted_at": "2026-07-28T16:45:54.731554+00:00",
+  "data": {
+    "approved_amount": "1500000",
+    "approval_conditions": "Hypothecation of inventory and book debts, personal guarantee of spouse, quarterly stock statements. Rate linked to external benchmark.",
+    "officer_name": "Neha Gupta",
+    "officer_id": "NG-2024-0387",
+    "interest_rate": "10"
+  }
+}

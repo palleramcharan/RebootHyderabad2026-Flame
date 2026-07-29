@@ -1,0 +1,17 @@
+{
+  "queue_id": "38f6b5d8-ca0a-44e2-ad35-d3607022aad7",
+  "application_id": "APP-1004",
+  "tx_type": "TX005",
+  "tx_num": 5,
+  "sequence": 11,
+  "service": "credit_approval",
+  "status": "queued",
+  "enqueued_at": "2026-07-28T19:31:51.707898+00:00",
+  "payload": {
+    "approved_amount": "1500000",
+    "approval_conditions": "Hypothecation of inventory and book debts, personal guarantee of spouse, quarterly stock statements. Rate linked to external benchmark.",
+    "officer_name": "Neha Gupta",
+    "officer_id": "NG-2024-0387",
+    "interest_rate": "10"
+  }
+}

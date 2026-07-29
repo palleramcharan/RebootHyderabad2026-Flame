@@ -1,0 +1,15 @@
+{
+  "submission_id": "BDSS-3219311463",
+  "application_id": "APP-1002",
+  "service": "bdss",
+  "submitted_at": "2026-07-28T16:44:51.401054+00:00",
+  "data": {
+    "applicant_name": "Arun Nair",
+    "email": "arun.nair@email.com",
+    "phone": "9765432109",
+    "annual_income": "3600000",
+    "requested_amount": "8000000",
+    "employment_type": "Business owner",
+    "purpose": "Commercial property purchase for IT services office"
+  }
+}

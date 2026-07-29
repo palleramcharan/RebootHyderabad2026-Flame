@@ -1,0 +1,14 @@
+{
+  "submission_id": "IRIS-6F76B2B88B",
+  "application_id": "APP-1004",
+  "service": "iris",
+  "submitted_at": "2026-07-28T16:46:00.924690+00:00",
+  "data": {
+    "account_number": "ICICI00098765432",
+    "disbursement_amount": "1500000",
+    "loan_tenure": "60",
+    "interest_rate": "10",
+    "booking_date": "2026-07-28",
+    "status": "Booked"
+  }
+}

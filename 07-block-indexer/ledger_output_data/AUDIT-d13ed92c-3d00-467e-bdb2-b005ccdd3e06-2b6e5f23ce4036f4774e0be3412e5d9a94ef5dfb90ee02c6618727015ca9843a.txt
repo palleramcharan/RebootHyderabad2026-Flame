@@ -1,0 +1,26 @@
+eventKey: AUDIT-d13ed92c-3d00-467e-bdb2-b005ccdd3e06-2b6e5f23ce4036f4774e0be3412e5d9a94ef5dfb90ee02c6618727015ca9843a
+applicationId: APP-1002
+auditId: d13ed92c-3d00-467e-bdb2-b005ccdd3e06
+blockNumber: 0
+businessEvent: TX_TX003
+changedFields: [{"field": "applicant_name", "newValue": "Arun Nair", "oldValue": null}, {"field": "email", "newValue": "arun.nair@email.com", "oldValue": null}, {"field": "phone", "newValue": "9765432109", "oldValue": null}, {"field": "annual_income", "newValue": "3600000", "oldValue": null}, {"field": "requested_amount", "newValue": "8000000", "oldValue": null}, {"field": "employment_type", "newValue": "Business owner", "oldValue": null}, {"field": "purpose", "newValue": "Commercial property purchase for IT services office", "oldValue": null}]
+channelName: auditchannel
+correlationId: a21759a6-de61-48f1-aec2-9c7bf96686eb
+currentHash: 999af753d50e20057ee8cd002800f384f176ef0b14d67a96fae7e5049d0e1000
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: dc319ecaa98709ac8d181c37981dfc234b8932d6c776fd25e29513a8346b18e4
+exportedAt: 2026-07-28T18:41:16.817324+00:00
+metadata:
+  payload: {'annual_income': '3600000', 'applicant_name': 'Arun Nair', 'email': 'arun.nair@email.com', 'employment_type': 'Business owner', 'phone': '9765432109', 'purpose': 'Commercial property purchase for IT services office', 'requested_amount': '8000000'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: e1aa8f40023cbbbcc698225007180d2e414d18bb9471c3e90adcba721ee9cac9
+sequence: 3
+service: bdss
+submissionId: APP-1002-TX003
+timestamp: 2026-07-28T18:03:27.445434+00:00
+transactionId: 2b6e5f23ce4036f4774e0be3412e5d9a94ef5dfb90ee02c6618727015ca9843a
+userId: SYSTEM
+workflowStep: bdss

@@ -1,0 +1,21 @@
+{
+  "name": "credit-decision-contract",
+  "version": "1.0.0",
+  "description": "Credit Decision Smart Contract",
+  "main": "index.js",
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "start": "fabric-chaincode-node start",
+    "test": "mocha --recursive"
+  },
+  "dependencies": {
+    "fabric-shim": "^2.5.0",
+    "fabric-contract-api": "^2.5.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "mocha": "^9.0.0"
+  }
+}

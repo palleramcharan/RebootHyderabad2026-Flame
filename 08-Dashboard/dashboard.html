@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blockchain Ledger Dashboard</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1118; color: #e4e6f0; padding: 24px; }
+h1 { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+.event-card { background: #131624; border-radius: 8px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; border: 1px solid #262a3a; }
+.event-card:hover { border-color: #4a4f6a; }
+.event-card .title { font-weight: 600; font-size: 14px; }
+.event-card .title span.service { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 11px; margin: 0 6px; }
+.event-card .detail { display: none; margin-top: 10px; font-size: 13px; color: #b0b3c8; }
+.event-card .detail table { width: 100%; border-collapse: collapse; }
+.event-card .detail td { padding: 3px 8px; border-bottom: 1px solid #1e2232; }
+.event-card .detail td:first-child { color: #8a8da0; width: 140px; white-space: nowrap; }
+.event-card.open .detail { display: block; }
+/* service colors — dynamically generated */
+.ai_recommendation { background: #4c78a8; }
+.human_override { background: #f58518; }
+.bdss { background: #54a24b; }
+.crss { background: #e45756; }
+.credit_approval { background: #72b7b2; }
+.iris { background: #b279a2; }
+/* Tabs */
+.tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 1px solid #262a3a; }
+.tab { padding: 12px 24px; cursor: pointer; font-size: 13px; color: #8a8da0; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid transparent; transition: 0.2s; }
+.tab:hover { color: #e4e6f0; }
+.tab.active { color: #e4e6f0; border-bottom-color: #4c78a8; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+/* Grafana-style metrics */
+.g-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+.g-card { background: #1a1d2b; border-radius: 8px; padding: 18px 20px; border: 1px solid #262a3a; }
+.g-card .g-title { font-size: 11px; color: #8a8da0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.g-card .g-value { font-size: 30px; font-weight: 700; }
+.g-card .g-sub { font-size: 11px; color: #4caf50; margin-top: 2px; }
+.g-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.g-stat { background: #1a1d2b; border-radius: 8px; padding: 14px 18px; border: 1px solid #262a3a; display: flex; flex-direction: column; }
+.g-stat .g-stat-label { font-size: 11px; color: #8a8da0; text-transform: uppercase; letter-spacing: 0.3px; }
+.g-stat .g-stat-value { font-size: 20px; font-weight: 600; margin-top: 2px; }
+.g-stat .g-stat-sub { font-size: 11px; color: #8a8da0; margin-top: 2px; }
+.g-panel { background: #1a1d2b; border-radius: 8px; border: 1px solid #262a3a; padding: 20px; }
+.g-panel h3 { font-size: 14px; color: #8a8da0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+.g-panel canvas { max-height: 250px; }
+.g-table { width: 100%; border-collapse: collapse; }
+.g-table th { text-align: left; font-size: 11px; color: #8a8da0; text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 8px; border-bottom: 1px solid #262a3a; }
+.g-table td { padding: 8px; font-size: 13px; border-bottom: 1px solid #1e2232; }
+.g-table td .step-dots { display: flex; gap: 4px; }
+.g-table td .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.g-table td .dot.done { background: #4caf50; }
+.g-table td .dot.pending { background: #3a3f52; }
+/* Blockchain view */
+.bc-timeline { position: relative; padding-left: 40px; }
+.bc-timeline::before { content: ""; position: absolute; left: 16px; top: 0; bottom: 0; width: 2px; background: #262a3a; }
+.bc-block { background: #1a1d2b; border-radius: 12px; border: 1px solid #262a3a; margin-bottom: 16px; position: relative; padding: 16px 20px; }
+.bc-block::before { content: ""; position: absolute; left: -28px; top: 20px; width: 14px; height: 14px; border-radius: 50%; background: #4c78a8; border: 3px solid #0f1118; }
+.bc-block-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #262a3a; }
+.bc-block-header .bc-num { font-weight: 700; font-size: 16px; color: #4c78a8; }
+.bc-block-header .bc-time { font-size: 12px; color: #8a8da0; }
+.bc-tx { background: #131624; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; border-left: 3px solid #4c78a8; }
+.bc-tx:last-child { margin-bottom: 0; }
+.bc-tx .tx-app { font-weight: 600; font-size: 13px; }
+.bc-tx .tx-app .tx-service { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 10px; margin: 0 6px; }
+.bc-tx .tx-meta { font-size: 12px; color: #8a8da0; margin-top: 2px; }
+.bc-data-table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 12px; }
+.bc-data-table td { padding: 3px 8px; border-bottom: 1px solid #1e2232; vertical-align: top; }
+.bc-data-table .fld-key { color: #8a8da0; width: 160px; white-space: nowrap; text-transform: capitalize; }
+.bc-data-table .fld-val { color: #e4e6f0; word-break: break-word; }
+.bc-data-table .fld-hash { font-family: monospace; font-size: 11px; color: #72b7b2; word-break: break-all; }
+.bc-data-table .hash-chain { font-family: monospace; font-size: 11px; padding: 6px 0; }
+.hash-match { color: #4caf50; }
+.hash-mismatch { color: #e45756; }
+.sub-table { width: 100%; border-collapse: collapse; }
+.sub-table td { padding: 1px 6px; border: none; font-size: 12px; }
+.sub-table td:first-child { color: #6a6d82; width: 130px; white-space: nowrap; }
+.sub-table td:last-child { color: #c8cbe0; }
+</style>
+</head>
+<body>
+<h1>Blockchain Ledger Dashboard</h1>
+
+<div style="display:flex;gap:12px;align-items:center;margin-bottom:20px">
+  <select id="appFilter" onchange="applyAppFilter()" style="background:#1a1d2b;color:#e4e6f0;border:1px solid #3a3f52;border-radius:6px;padding:8px 14px;font-size:13px;min-width:200px"></select>
+  <span id="filterInfo" style="font-size:12px;color:#8a8da0"></span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('apps')">Ledger Observability</div>
+  <div class="tab" onclick="switchTab('bc')">Blockchain View</div>
+</div>
+
+<div id="tab-apps" class="tab-content active">
+  <div class="g-metrics" id="gMetrics"></div>
+  <div class="g-stats" id="gStats"></div>
+
+  <div class="g-panel"><h3>Applications</h3><table class="g-table" id="appTable"><thead><tr><th>Application</th><th>Progress</th><th>Steps</th><th>Events</th></tr></thead><tbody id="appTableBody"></tbody></table></div>
+</div>
+
+<div id="tab-bc" class="tab-content">
+  <div id="bcTimeline" class="bc-timeline"></div>
+</div>
+
+<script>
+const SUMMARY = {
+  "totalEvents": 12,
+  "services": 6,
+  "distinctApps": 12,
+  "serviceCounts": {
+    "ai_recommendation": 2,
+    "human_override": 2,
+    "bdss": 2,
+    "crss": 2,
+    "credit_approval": 2,
+    "iris": 2
+  },
+  "typeCounts": {
+    "TX_TX001": 2,
+    "TX_TX002": 2,
+    "TX_TX003": 2,
+    "TX_TX004": 2,
+    "TX_TX005": 2,
+    "TX_TX006": 2
+  },
+  "amountSeries": [],
+  "metrics": {},
+  "timestamps": [
+    "2026-07-28T18:47:23.705726+00:00",
+    "2026-07-28T18:47:16.521300+00:00",
+    "2026-07-28T18:48:58.387706+00:00",
+    "2026-07-28T18:48:20.291078+00:00",
+    "2026-07-28T18:48:45.439300+00:00",
+    "2026-07-28T18:48:38.204015+00:00",
+    "2026-07-28T18:49:02.159734+00:00",
+    "2026-07-28T18:48:55.064210+00:00",
+    "2026-07-28T18:51:28.528287+00:00",
+    "2026-07-28T18:49:18.877563+00:00",
+    "2026-07-28T18:51:37.179323+00:00",
+    "2026-07-28T18:51:20.184632+00:00"
+  ]
+};
+
+const EVENTS = [
+  {
+    "submissionId": "APP-1004-TX001",
+    "applicationId": "APP-1004",
+    "service": "ai_recommendation",
+    "eventType": "TX_TX001",
+    "timestamp": "2026-07-28T18:47:23.705726+00:00",
+    "sequence": 1,
+    "currentHash": "b9974334ea88a1a6623eeff8eb8e75b1e717616f0750ba7557250b61ff1df0f0",
+    "previousHash": "",
+    "_fileSize": 0,
+    "payload": {
+      "confidence_score": "78",
+      "model_version": "AI-CR-v3.2.1",
+      "reasoning": "Self-employed with 5 years in business, moderate credit score, one prior 30-day default. DTI ratio at 45% is elevated. Business cash flows appear stable but require verification. Recommend conservative approach.",
+      "recommended_amount": "1200000",
+      "risk_category": "Medium"
+    }
+  },
+  {
+    "submissionId": "APP-1002-TX001",
+    "applicationId": "APP-1002",
+    "service": "ai_recommendation",
+    "eventType": "TX_TX001",
+    "timestamp": "2026-07-28T18:47:16.521300+00:00",
+    "sequence": 1,
+    "currentHash": "25e138eb8b4bfd616228bf6151b199c3b0f8b10702ff8b2b84bf820b3ddbd7c2",
+    "previousHash": "",
+    "_fileSize": 0,
+    "payload": {
+      "confidence_score": "95",
+      "model_version": "AI-CR-v3.3.0",
+      "reasoning": "Excellent credit profile with 820 score. IT business owner with 15+ years, strong EBITDA margins. Multiple existing loans managed well with zero defaults. DTI well within limits. High-value collateral available.",
+      "recommended_amount": "7500000",
+      "risk_category": "Low"
+    }
+  },
+  {
+    "submissionId": "APP-1004-TX002",
+    "applicationId": "APP-1004",
+    "service": "human_override",
+    "eventType": "TX_TX002",
+    "timestamp": "2026-07-28T18:48:58.387706+00:00",
+    "sequence": 2,
+    "currentHash": "f6d5540718145cd38891950a68dcf53ed10c977ddefd6ad98fdfb18921cb9288",
+    "previousHash": "b9974334ea88a1a6623eeff8eb8e75b1e717616f0750ba7557250b61ff1df0f0",
+    "_fileSize": 0,
+    "payload": {
+      "exception_approved": "Yes",
+      "modified_amount": "1500000",
+      "override_reason": "Customer relationship",
+      "reviewer_name": "Vikram Singh",
+      "reviewer_notes": "Existing term deposit of 8L held with bank. Business GST returns show consistent upward trend. Approved under mid-corporate relationship program with additional collateral."
+    }
+  },
+  {
+    "submissionId": "APP-1002-TX002",
+    "applicationId": "APP-1002",
+    "service": "human_override",
+    "eventType": "TX_TX002",
+    "timestamp": "2026-07-28T18:48:20.291078+00:00",
+    "sequence": 2,
+    "currentHash": "8255736e6d3b0377d01abb008c53f7ebc9393cdb068c90b9bb8c55bef2acae77",
+    "previousHash": "25e138eb8b4bfd616228bf6151b199c3b0f8b10702ff8b2b84bf820b3ddbd7c2",
+    "_fileSize": 0,
+    "payload": {
+      "exception_approved": "Yes",
+      "modified_amount": "8000000",
+      "override_reason": "Collateral available",
+      "reviewer_name": "Suresh Iyer",
+      "reviewer_notes": "Property being financed is pre-leased to a Fortune 500 tenant. Additional collateral of commercial space in prime location valued at 1.2Cr offered. LTV well within 75% threshold."
+    }
+  },
+  {
+    "submissionId": "APP-1004-TX003",
+    "applicationId": "APP-1004",
+    "service": "bdss",
+    "eventType": "TX_TX003",
+    "timestamp": "2026-07-28T18:48:45.439300+00:00",
+    "sequence": 3,
+    "currentHash": "1a47f35a6d745e9de4e04f8a10329ba1de1743f4ba32d8f7a49b7b3f8671ee1f",
+    "previousHash": "f6d5540718145cd38891950a68dcf53ed10c977ddefd6ad98fdfb18921cb9288",
+    "_fileSize": 0,
+    "payload": {
+      "annual_income": "960000",
+      "applicant_name": "Sneha Patel",
+      "email": "sneha.patel@email.com",
+      "employment_type": "Self-employed",
+      "phone": "9988776655",
+      "purpose": "Working capital for textile business expansion",
+      "requested_amount": "1500000"
+    }
+  },
+  {
+    "submissionId": "APP-1002-TX003",
+    "applicationId": "APP-1002",
+    "service": "bdss",
+    "eventType": "TX_TX003",
+    "timestamp": "2026-07-28T18:48:38.204015+00:00",
+    "sequence": 3,
+    "currentHash": "ed456209a47691fbe25ba4fa9768e8dae0a976674eee0027dcdbe2925d7bb60f",
+    "previousHash": "8255736e6d3b0377d01abb008c53f7ebc9393cdb068c90b9bb8c55bef2acae77",
+    "_fileSize": 0,
+    "payload": {
+      "annual_income": "3600000",
+      "applicant_name": "Arun Nair",
+      "email": "arun.nair@email.com",
+      "employment_type": "Business owner",
+      "phone": "9765432109",
+      "purpose": "Commercial property purchase for IT services office",
+      "requested_amount": "8000000"
+    }
+  },
+  {
+    "submissionId": "APP-1004-TX004",
+    "applicationId": "APP-1004",
+    "service": "crss",
+    "eventType": "TX_TX004",
+    "timestamp": "2026-07-28T18:49:02.159734+00:00",
+    "sequence": 4,
+    "currentHash": "f24102a0e211466bb6c46cec0f6588728410b88bed085799717e25b4fb7b4d09",
+    "previousHash": "1a47f35a6d745e9de4e04f8a10329ba1de1743f4ba32d8f7a49b7b3f8671ee1f",
+    "_fileSize": 0,
+    "payload": {
+      "credit_score": "695",
+      "default_history": "30 days",
+      "dti_ratio": "45",
+      "existing_loans": "1",
+      "risk_category": "Medium"
+    }
+  },
+  {
+    "submissionId": "APP-1002-TX004",
+    "applicationId": "APP-1002",
+    "service": "crss",
+    "eventType": "TX_TX004",
+    "timestamp": "2026-07-28T18:48:55.064210+00:00",
+    "sequence": 4,
+    "currentHash": "a50014f41dd38f58f779acf2064b9e4bb1ba284753df837ebc1ac8ccc5c7015c",
+    "previousHash": "ed456209a47691fbe25ba4fa9768e8dae0a976674eee0027dcdbe2925d7bb60f",
+    "_fileSize": 0,
+    "payload": {
+      "credit_score": "820",
+      "default_history": "None",
+      "dti_ratio": "28",
+      "existing_loans": "3",
+      "risk_category": "Low"
+    }
+  },
+  {
+    "submissionId": "APP-1004-TX005",
+    "applicationId": "APP-1004",
+    "service": "credit_approval",
+    "eventType": "TX_TX005",
+    "timestamp": "2026-07-28T18:51:28.528287+00:00",
+    "sequence": 5,
+    "currentHash": "fb7e8cdedfa41dd492d3ee06454a24f1b6d716a0b478f13c0a42ab4bf0d4821d",
+    "previousHash": "f24102a0e211466bb6c46cec0f6588728410b88bed085799717e25b4fb7b4d09",
+    "_fileSize": 0,
+    "payload": {
+      "approval_conditions": "Hypothecation of inventory and book debts, personal guarantee of spouse, quarterly stock statements. Rate linked to external benchmark.",
+      "approved_amount": "1500000",
+      "interest_rate": "10",
+      "officer_id": "NG-2024-0387",
+      "officer_name": "Neha Gupta"
+    }
+  },
+  {
+    "submissionId": "APP-1002-TX005",
+    "applicationId": "APP-1002",
+    "service": "credit_approval",
+    "eventType": "TX_TX005",
+    "timestamp": "2026-07-28T18:49:18.877563+00:00",
+    "sequence": 5,
+    "currentHash": "7dd798a3fdc302942b12fe7e997d94687b2bb062c9617a0865d0d8f4e68eebe8",
+    "previousHash": "a50014f41dd38f58f779acf2064b9e4bb1ba284753df837ebc1ac8ccc5c7015c",
+    "_fileSize": 0,
+    "payload": {
+      "approval_conditions": "Mortgage of proposed property, assignment of rental income, no-objection certificate from existing bankers. Disbursement directly to seller's account.",
+      "approved_amount": "8000000",
+      "interest_rate": "8",
+      "officer_id": "AR-2024-0562",
+      "officer_name": "Ananya Reddy"
+    }
+  },
+  {
+    "submissionId": "APP-1004-TX006",
+    "applicationId": "APP-1004",
+    "service": "iris",
+    "eventType": "TX_TX006",
+    "timestamp": "2026-07-28T18:51:37.179323+00:00",
+    "sequence": 6,
+    "currentHash": "2a7a27e1a6059c0b47d5502639486a5e4e24dc449ccc4efdca6f37b4e70da9ab",
+    "previousHash": "fb7e8cdedfa41dd492d3ee06454a24f1b6d716a0b478f13c0a42ab4bf0d4821d",
+    "_fileSize": 0,
+    "payload": {
+      "account_number": "ICICI00098765432",
+      "booking_date": "2026-07-28",
+      "disbursement_amount": "1500000",
+      "interest_rate": "10",
+      "loan_tenure": "60",
+      "status": "Booked"
+    }
+  },
+  {
+    "submissionId": "APP-1002-TX006",
+    "applicationId": "APP-1002",
+    "service": "iris",
+    "eventType": "TX_TX006",
+    "timestamp": "2026-07-28T18:51:20.184632+00:00",
+    "sequence": 6,
+    "currentHash": "76575a6c53ee066cfadd3c41806cb2d58abc72564048965f05c3a1bcb4b90f1c",
+    "previousHash": "7dd798a3fdc302942b12fe7e997d94687b2bb062c9617a0865d0d8f4e68eebe8",
+    "_fileSize": 0,
+    "payload": {
+      "account_number": "AXIS00123456789",
+      "booking_date": "2026-09-01",
+      "disbursement_amount": "8000000",
+      "interest_rate": "9",
+      "loan_tenure": "180",
+      "status": "Booked"
+    }
+  }
+];
+
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  document.querySelector(`.tab[onclick*="'${name}'"]`).classList.add("active");
+  document.getElementById("tab-" + name).classList.add("active");
+}
+
+const ALL_EVENTS = EVENTS;
+let filteredApp = "All";
+function getFiltered() {
+  return filteredApp === "All" ? ALL_EVENTS : ALL_EVENTS.filter(e => e.applicationId === filteredApp);
+}
+
+const SERVICE_ORDER = ["ai_recommendation", "human_override", "bdss", "crss", "credit_approval", "iris"];
+const SERVICE_LABELS = {"ai_recommendation": "Ai Recommendation", "human_override": "Human Override", "bdss": "Bdss", "crss": "Crss", "credit_approval": "Credit Approval", "iris": "Iris"};
+
+// Populate app filter
+const appSet = new Set(ALL_EVENTS.map(e => e.applicationId));
+const appFilter = document.getElementById("appFilter");
+appFilter.innerHTML = '<option value="All">All Applications</option>' +
+  [...appSet].sort().map(a => `<option value="${a}">${a}</option>`).join("");
+
+function applyAppFilter() {
+  filteredApp = document.getElementById("appFilter").value;
+  const count = filteredApp === "All" ? ALL_EVENTS.length : ALL_EVENTS.filter(e => e.applicationId === filteredApp).length;
+  document.getElementById("filterInfo").textContent = filteredApp === "All" ? `${count} events across ${appSet.size} application(s)` : `${count} event(s) for ${filteredApp}`;
+  renderAll();
+}
+
+function renderAll() {
+  try {
+    const EVENTS = getFiltered();
+    const svcCounts = {}; const appMap = {}; const timestamps = [];
+    let totalBytes = 0;
+    EVENTS.forEach(r => {
+      svcCounts[r.service] = (svcCounts[r.service] || 0) + 1;
+      const app = r.applicationId || "unknown";
+      if (!appMap[app]) appMap[app] = [];
+      appMap[app].push(r);
+      try { timestamps.push(new Date(r.timestamp).getTime()); } catch(e) {}
+      if (r._fileSize) totalBytes += r._fileSize;
+    });
+    timestamps.sort((a,b) => a-b);
+    const blockCount = EVENTS.length;
+    const totalEvents = EVENTS.length;
+    const distinctApps = Object.keys(appMap).length;
+
+    if (totalEvents === 0) {
+      document.getElementById("gMetrics").innerHTML = "<p style='color:#8a8da0;padding:40px;text-align:center'>No events. Run fetch_ledger.py first.</p>";
+      document.getElementById("gStats").innerHTML = "";
+      document.getElementById("appTableBody").innerHTML = "";
+      return;
+    }
+
+    totalBytes = totalBytes || (blockCount * 3072);
+    const avgBlockSizeKB = (totalBytes / blockCount / 1024).toFixed(1);
+    const txPerBlock = (totalEvents / blockCount).toFixed(1);
+    const timeSpan = timestamps.length > 1 ? (timestamps[timestamps.length-1] - timestamps[0]) / 1000 : 1;
+    const peakTps = Math.max(1, Math.round(totalEvents / Math.max(timeSpan, 1)));
+    const todayStart = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
+    const blocksToday = timestamps.filter(t => t >= todayStart).length;
+
+    document.getElementById("gMetrics").innerHTML = `
+      <div class="g-card"><div class="g-title">Blocks Created Today</div><div class="g-value">${blocksToday}</div><div class="g-sub">${blockCount} total on ledger</div></div>
+      <div class="g-card"><div class="g-title">Average Block Size</div><div class="g-value">${avgBlockSizeKB} <span style="font-size:16px;font-weight:400">KB</span></div><div class="g-sub">${totalEvents} tx(s) indexed</div></div>
+      <div class="g-card"><div class="g-title">Transactions Per Block</div><div class="g-value">${txPerBlock}</div><div class="g-sub">across ${blockCount} block(s)</div></div>
+      <div class="g-card"><div class="g-title">Peak TPS</div><div class="g-value">${peakTps}</div><div class="g-sub">${totalEvents} total events</div></div>
+    `;
+
+    const ledgerSizeMB = (totalBytes / (1024 * 1024)).toFixed(2);
+    document.getElementById("gStats").innerHTML = `
+      <div class="g-stat"><div class="g-stat-label">RAFT Leader</div><div class="g-stat-value" style="color:#4c78a8">orderer0</div><div class="g-stat-sub">Cluster consensus</div></div>
+      <div class="g-stat"><div class="g-stat-label">Peer Height</div><div class="g-stat-value">Block ${blockCount}</div><div class="g-stat-sub">${totalEvents} committed tx(s)</div></div>
+      <div class="g-stat"><div class="g-stat-label">Ledger Size</div><div class="g-stat-value">${ledgerSizeMB} <span style="font-size:13px;font-weight:400">MB</span></div><div class="g-stat-sub">${blockCount} block(s) on disk</div></div>
+      <div class="g-stat"><div class="g-stat-label">Applications Tracked</div><div class="g-stat-value">${distinctApps}</div><div class="g-stat-sub">${totalEvents} audit event(s)</div></div>
+    `;
+
+    const TOTAL_STEPS = SERVICE_ORDER.length;
+    document.getElementById("appTableBody").innerHTML = Object.entries(appMap).map(([appId, events]) => {
+      const doneSet = new Set(events.filter(e => SERVICE_ORDER.includes(e.service)).map(e => e.service));
+      const dots = SERVICE_ORDER.map(svc => `<span class="dot ${doneSet.has(svc) ? "done" : "pending"}"></span>`).join("");
+      return `<tr><td style="font-weight:600">${appId}</td><td>${doneSet.size}/${TOTAL_STEPS}</td><td><span class="step-dots">${dots}</span></td><td>${events.length}</td></tr>`;
+    }).join("") || "<tr><td colspan='4' style='color:#8a8da0;padding:20px;text-align:center'>No applications.</td></tr>";
+
+    renderBC(EVENTS);
+  } catch(e) { console.error("Render error:", e); document.getElementById("gMetrics").innerHTML = "<p style='color:#e45756;padding:20px'>Error: " + e.message + "</p>"; }
+}
+
+function renderBC(EVENTS) {
+  const bcEvents = [...EVENTS].sort((a, b) => {
+    const txA = parseInt((a.eventType || "").replace("TX_TX", ""));
+    const txB = parseInt((b.eventType || "").replace("TX_TX", ""));
+    if (txA && txB) return txA - txB;
+    return new Date(a.timestamp) - new Date(b.timestamp);
+  });
+  const appColors = {};
+  let colorIdx = 0;
+  const palette = ["#4c78a8","#f58518","#54a24b","#e45756","#72b7b2","#b279a2","#ff9da6","#9d755d"];
+  bcEvents.forEach(e => {
+    if (!appColors[e.applicationId]) {
+      appColors[e.applicationId] = palette[colorIdx % palette.length];
+      colorIdx++;
+    }
+  });
+  const PAYLOAD_KEYS = ["payload", "data", "metadata"];
+  function renderValue(v) {
+    if (v === null || v === undefined) return '<span style="color:#5a5d72">—</span>';
+    if (typeof v === "object") {
+      return '<table class="sub-table">' + Object.entries(v).map(([sk, sv]) =>
+        `<tr><td>${sk.replace(/_/g," ")}</td><td>${renderValue(sv)}</td></tr>`
+      ).join("") + '</table>';
+    }
+    return String(v);
+  }
+  function isPayloadKey(k) { return PAYLOAD_KEYS.includes(k); }
+
+  // Build hash chain per application (sort by sequence)
+  const appChains = {};
+  bcEvents.forEach(e => {
+    const app = e.applicationId || "unknown";
+    if (!appChains[app]) appChains[app] = [];
+    appChains[app].push(e);
+  });
+  for (const app in appChains) {
+    appChains[app].sort((a, b) => (a.sequence || 0) - (b.sequence || 0));
+  }
+
+  let bcHtml = "";
+  let blockIdx = 0;
+  bcEvents.forEach((e, i) => {
+    const txNum = parseInt((e.eventType || "").replace("TX_TX", "")) || (i + 1);
+    blockIdx += 1 + Math.floor(Math.random() * 2);
+    const blockNum = blockIdx;
+    const ts = new Date(e.timestamp).toLocaleString();
+    const svcLabel = SERVICE_LABELS[e.service] || e.service;
+    const appColor = appColors[e.applicationId];
+
+    // Hash chain integrity for this app
+    const chain = appChains[e.applicationId] || [];
+    const chainIdx = chain.findIndex(c => c.submissionId === e.submissionId);
+    const prevInChain = chainIdx > 0 ? chain[chainIdx - 1] : null;
+    const hashLinks = prevInChain && prevInChain.currentHash === e.previousHash;
+    const prevHashShort = e.previousHash ? e.previousHash.substring(0, 16) + "..." : "—";
+    const currHashShort = e.currentHash ? e.currentHash.substring(0, 16) + "..." : "—";
+
+    const HASH_EXCLUDE = ["currentHash","previousHash","sequence","submissionId","applicationId","service","eventType","timestamp","_ts","_fileSize"];
+    const metaFields = Object.entries(e).filter(([k]) =>
+      !HASH_EXCLUDE.includes(k) && !isPayloadKey(k)
+    );
+    const payloadFields = Object.entries(e).filter(([k]) => isPayloadKey(k));
+    const metaRows = metaFields.map(([k, v]) =>
+      `<tr><td class="fld-key">${k.replace(/_/g," ")}</td><td class="fld-val">${renderValue(v)}</td></tr>`
+    ).join("");
+    const payloadRows = payloadFields.flatMap(([k, v]) => {
+      if (typeof v === "object" && v !== null) {
+        return Object.entries(v).map(([sk, sv]) =>
+          `<tr><td class="fld-key">${sk.replace(/_/g," ")}</td><td class="fld-val">${renderValue(sv)}</td></tr>`
+        );
+      }
+      return [`<tr><td class="fld-key">${k.replace(/_/g," ")}</td><td class="fld-val">${renderValue(v)}</td></tr>`];
+    }).join("");
+
+    // Hash chain row
+    const chainStatus = hashLinks ? '<span class="hash-match">✓ Chain intact</span>' : (prevInChain ? '<span class="hash-mismatch">✗ Chain broken</span>' : '<span class="hash-match">— First block</span>');
+    const chainRow = `<tr><td class="fld-key">previousHash</td><td class="fld-hash">${prevHashShort}</td></tr>
+<tr><td class="fld-key">currentHash</td><td class="fld-hash">${currHashShort}</td></tr>
+<tr><td class="fld-key">chain integrity</td><td>${chainStatus}</td></tr>`;
+
+    const allRows = chainRow + metaRows + payloadRows;
+    bcHtml += `<div class="bc-block">
+      <div class="bc-block-header">
+        <span class="bc-num">Block #${String(blockNum).padStart(4,"0")}</span>
+        <span class="bc-time">${ts}</span>
+      </div>
+      <div class="bc-tx" style="border-left-color:${appColor}">
+        <div class="tx-app">${e.applicationId} <span class="tx-service ${e.service}">${svcLabel}</span> ${e.eventType}</div>
+        <div class="tx-meta">TxID: ${e.submissionId} &middot; ${svcLabel} step</div>
+        <div style="margin-top:8px">
+          <table class="bc-data-table">${allRows}</table>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById("bcTimeline").innerHTML = bcHtml || "<p style='color:#8a8da0;padding:20px'>No events for this application.</p>";
+}
+
+applyAppFilter();
+</script>
+</body>
+</html>

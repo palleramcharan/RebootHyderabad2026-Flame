@@ -1,0 +1,20 @@
+{
+  "queue_id": "04ff119b-a612-405a-aea7-8277b713b13c",
+  "application_id": "APP-1002",
+  "tx_type": "TX006",
+  "tx_num": 6,
+  "sequence": 6,
+  "service": "iris",
+  "status": "completed",
+  "enqueued_at": "2026-07-28T18:47:00.910437+00:00",
+  "payload": {
+    "account_number": "AXIS00123456789",
+    "disbursement_amount": "8000000",
+    "loan_tenure": "180",
+    "interest_rate": "9",
+    "booking_date": "2026-09-01",
+    "status": "Booked"
+  },
+  "dequeued_at": "2026-07-28T18:51:15.420454+00:00",
+  "completed_at": "2026-07-28T18:51:22.674831+00:00"
+}

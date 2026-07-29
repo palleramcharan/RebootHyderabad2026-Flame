@@ -1,0 +1,26 @@
+eventKey: AUDIT-84581b63-a4a4-4c32-a4d4-9c3488d3aa99-7a1545015f0483740d2782ddd9e7731a8861b88e8c4612d4ecdeb3598367afbb
+applicationId: APP-1004
+auditId: 84581b63-a4a4-4c32-a4d4-9c3488d3aa99
+blockNumber: 0
+businessEvent: TX_TX001
+changedFields: [{"field": "risk_category", "newValue": "Medium", "oldValue": null}, {"field": "recommended_amount", "newValue": "1200000", "oldValue": null}, {"field": "confidence_score", "newValue": "78", "oldValue": null}, {"field": "reasoning", "newValue": "Self-employed with 5 years in business, moderate credit score, one prior 30-day default. DTI ratio at 45% is elevated. Business cash flows appear stable but require verification. Recommend conservative approach.", "oldValue": null}, {"field": "model_version", "newValue": "AI-CR-v3.2.1", "oldValue": null}]
+channelName: auditchannel
+correlationId: fbd4bcdd-2b99-4d16-8bf8-3201f53bad37
+currentHash: 2e9460d8934b7bcef74713bdba5379767d263e26e2524ee3792a35226dae375b
+eventCategory: AUDIT
+eventSeverity: INFO
+eventVersion: 2.0
+evidenceHash: 660e3232884f5be7e38277bca56936c98f272800d6c429d515ed6e6c275b1ac7
+exportedAt: 2026-07-28T18:41:16.807706+00:00
+metadata:
+  payload: {'confidence_score': '78', 'model_version': 'AI-CR-v3.2.1', 'reasoning': 'Self-employed with 5 years in business, moderate credit score, one prior 30-day default. DTI ratio at 45% is elevated. Business cash flows appear stable but require verification. Recommend conservative approach.', 'recommended_amount': '1200000', 'risk_category': 'Medium'}
+mspId: Org1MSP
+operation: UPDATE
+previousHash: 
+sequence: 1
+service: ai_recommendation
+submissionId: APP-1004-TX001
+timestamp: 2026-07-28T18:35:51.376989+00:00
+transactionId: 7a1545015f0483740d2782ddd9e7731a8861b88e8c4612d4ecdeb3598367afbb
+userId: SYSTEM
+workflowStep: ai_recommendation

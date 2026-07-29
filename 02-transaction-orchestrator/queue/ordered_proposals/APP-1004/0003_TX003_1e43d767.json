@@ -1,0 +1,21 @@
+{
+  "queue_id": "1e43d767-698f-41e9-8e11-23bd802242b3",
+  "application_id": "APP-1004",
+  "tx_type": "TX003",
+  "tx_num": 3,
+  "sequence": 3,
+  "service": "bdss",
+  "status": "completed",
+  "enqueued_at": "2026-07-28T18:47:00.902749+00:00",
+  "payload": {
+    "applicant_name": "Sneha Patel",
+    "email": "sneha.patel@email.com",
+    "phone": "9988776655",
+    "annual_income": "960000",
+    "requested_amount": "1500000",
+    "employment_type": "Self-employed",
+    "purpose": "Working capital for textile business expansion"
+  },
+  "dequeued_at": "2026-07-28T18:48:38.571959+00:00",
+  "completed_at": "2026-07-28T18:48:47.943440+00:00"
+}

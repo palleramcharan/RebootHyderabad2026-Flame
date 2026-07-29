@@ -1,0 +1,17 @@
+{
+  "queue_id": "8bace4fb-c579-45b9-9303-70798e9fd3a0",
+  "application_id": "APP-1002",
+  "tx_type": "TX004",
+  "tx_num": 4,
+  "sequence": 10,
+  "service": "crss",
+  "status": "queued",
+  "enqueued_at": "2026-07-28T19:31:51.703133+00:00",
+  "payload": {
+    "credit_score": "820",
+    "existing_loans": "3",
+    "default_history": "None",
+    "dti_ratio": "28",
+    "risk_category": "Low"
+  }
+}
